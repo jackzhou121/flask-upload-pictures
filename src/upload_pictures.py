@@ -53,10 +53,12 @@ def get_gallery():
 @app.route("/process_image", methods=['POST'])
 def process_image():
     print("Your pictures are being processing....")
-    image_names = os.listdir('./images')
-    print(image_names)
-    process_image_in_ssd_neural_network(image_names)
-    return render_template("complete_display_image.html", input_image_names=image_names, output_image_names=image_names)
+    input_image_names = os.listdir('./images')
+    print(input_image_names)
+    process_image_in_ssd_neural_network(input_image_names)
+    output_image_names = os.listdir('./outputImages_path')
+    return render_template("complete_display_image.html", input_image_names=input_image_names,
+                           output_image_names=output_image_names)
 
 
 def process_image_in_ssd_neural_network(image_list):
