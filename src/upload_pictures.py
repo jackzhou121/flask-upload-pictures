@@ -10,7 +10,7 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 @app.route("/")
 def index():
-    return render_template("upload.html")
+    return render_template("gallery.html")
 
 
 @app.route("/upload", methods=["POST"])
@@ -54,10 +54,12 @@ def get_gallery():
 def process_image():
     print("Your pictures are being processing....")
     input_image_names = os.listdir('./images')
-    print(input_image_names)
-    process_image_in_ssd_neural_network(input_image_names)
-    output_image_names = os.listdir('./outputImages_path')
-    return render_template("complete_display_image.html", input_image_names=input_image_names,
+    for image in request.form.getlist('picture_list'):
+        print(image)
+        process_image_in_ssd_neural_network(image)
+
+    output_image_names = os.listdir('./images')
+    return render_template("complete_display_image.html",
                            output_image_names=output_image_names)
 
 
