@@ -10,7 +10,8 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 @app.route("/")
 def index():
-    return render_template("gallery.html")
+    image_names = os.listdir('./images')
+    return render_template("gallery.html", image_names=image_names)
 
 
 @app.route("/upload", methods=["POST"])
@@ -64,9 +65,8 @@ def process_image():
 
 
 def process_image_in_ssd_neural_network(image_list):
-    for image in image_list:
-        print(image)
+    pass
 
 
 if __name__ == "__main__":
-    app.run(port=4555, debug=True)
+    app.run(port=4556, debug=True)
