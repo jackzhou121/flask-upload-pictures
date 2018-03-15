@@ -8,7 +8,7 @@
 </head>
 
 <body>
-<form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+<form id="upload-form" action="{{ url_for('back') }}" method="POST" enctype="multipart/form-data">
     <input type="submit" value="Back" id="upload-button">
 </form>
 </body>
@@ -19,8 +19,8 @@
         <hr>
         <h1 class="page-header">Result Pictures</h1>
         {% for image_name in output_image_names %}
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <img src=" {{url_for('send_image', filename=image_name)}}" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail" >
+        <div class="col-xs-6 col-sm-3 placeholder black">
+            <img src=" {{url_for('send_output_image', filename=image_name)}}" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail" >
             <h4>{{image_name}}</h4>
             </div>
         {% endfor %}

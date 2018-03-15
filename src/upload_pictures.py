@@ -1,7 +1,9 @@
 import os
 from flask import Flask, request, render_template, send_from_directory
+import ssd_test
+import sys
 
-__author__ = 'ibininja'
+sys.path.append('../')
 
 app = Flask(__name__)
 
@@ -22,20 +24,47 @@ def upload():
             os.mkdir(target)
     else:
         print("Couldn't create upload directory: {}".format(target))
-    print(request.files.getlist("file"))
-    for upload in request.files.getlist("file"):
-        print(upload)
-        print("{} is the file name".format(upload.filename))
-        filename = upload.filename
+
+    for image in request.files.getlist("file"):
+        filename = image.filename
         destination = "/".join([target, filename])
-        print ("Accept incoming file:", filename)
-        print ("Save it to:", destination)
         upload.save(destination)
 
-    #return render_template("complete.html", image_name=filename)
     image_names = os.listdir('./images')
-    print(image_names)
 
+    return render_template("gallery.html", image_names=image_names)
+
+
+@app.route("/back", methods=["POST"])
+def back():
+    target = os.path.join(APP_ROOT, 'images/')
+    print(target)
+    if not os.path.isdir(target):
+            os.mkdir(target)
+    else:
+        print("Couldn't create upload directory: {}".format(target))
+
+    image_names = os.listdir('./output_images')
+    for image in image_names:
+        try:
+            os.remove('./output_images/' + image)
+        except:
+            print("remove failed", image)
+
+    image_names = os.listdir('./images')
+
+    return render_template("gallery.html", image_names=image_names)
+
+
+@app.route("/show", methods=["POST"])
+def show():
+    target = os.path.join(APP_ROOT, 'output_images/')
+    print(target)
+    if not os.path.isdir(target):
+            os.mkdir(target)
+    else:
+        print("Couldn't create show directory: {}".format(target))
+    image_names = os.listdir('./output_images')
     return render_template("gallery.html", image_names=image_names)
 
 
@@ -44,29 +73,20 @@ def send_image(filename):
     return send_from_directory("images", filename)
 
 
-@app.route('/gallery')
-def get_gallery():
-    image_names = os.listdir('./images')
-    print(image_names)
-    return render_template("gallery.html", image_names=image_names)
+@app.route('/show/<filename>')
+def send_output_image(filename):
+    return send_from_directory("output_images", filename)
 
 
 @app.route("/process_image", methods=['POST'])
 def process_image():
-    print("Your pictures are being processing....")
-    input_image_names = os.listdir('./images')
     for image in request.form.getlist('picture_list'):
-        print(image)
-        process_image_in_ssd_neural_network(image)
+        ssd_test.bndbox_image(image)
 
-    output_image_names = os.listdir('./images')
+    output_image_names = os.listdir('./output_images')
     return render_template("complete_display_image.html",
                            output_image_names=output_image_names)
 
 
-def process_image_in_ssd_neural_network(image_list):
-    pass
-
-
 if __name__ == "__main__":
-    app.run(port=4556, debug=True)
+    app.run(host='0.0.0.0', port=4556, debug=True)
