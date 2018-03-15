@@ -28,7 +28,7 @@ def upload():
     for image in request.files.getlist("file"):
         filename = image.filename
         destination = "/".join([target, filename])
-        upload.save(destination)
+        image.save(destination)
 
     image_names = os.listdir('./images')
 
