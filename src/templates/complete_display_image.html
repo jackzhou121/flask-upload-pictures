@@ -17,7 +17,7 @@
 <div class="container-fluid">
     <div class="row placeholders">
         <hr>
-        <h1 class="page-header">Result Pictures</h1>
+        <h1 class="page-header">SSD Pictures</h1>
         {% for image_name in output_image_names %}
         <div class="col-xs-6 col-sm-3 placeholder black">
             <img src=" {{url_for('send_output_image', filename=image_name)}}" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail" >
